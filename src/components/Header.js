@@ -27,7 +27,7 @@ class Header extends Component {
           : (
             <>
               <p data-testid="header-user-name">{ userObj.name }</p>
-              <nav>
+              <nav id="nav-links">
                 <ul>
                   <li>
                     <Link to="/search" data-testid="link-to-search">Pesquisar</Link>
