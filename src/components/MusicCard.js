@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { shape } from 'prop-types';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import LoadingPage from '../pages/LoadingPage';
 
 class MusicCard extends React.Component {
@@ -22,11 +22,19 @@ class MusicCard extends React.Component {
   favClick = async ({ target }) => {
     const { checked } = target;
     const { songObj } = this.props;
-    this.setState({ isLoading: true, favCheck: checked });
-    await addSong(songObj);
-    this.setState({
-      isLoading: false,
-    });
+    if (checked) {
+      this.setState({ isLoading: true, favCheck: checked });
+      await addSong(songObj);
+      this.setState({
+        isLoading: false,
+      });
+    } if (!checked) {
+      this.setState({ isLoading: true, favCheck: checked });
+      await removeSong(songObj);
+      this.setState({
+        isLoading: false,
+      });
+    }
   };
 
   render() {
