@@ -43,9 +43,10 @@ class Album extends Component {
                 ? (
                   <div key={ (index + 1) }>
                     <MusicCard
+                      songObj={ result }
                       songName={ result.trackName }
                       preview={ result.previewUrl }
-                      musicId={ apiMusics }
+                      trackId={ result.trackId }
                     />
                   </div>
                 ) : null
