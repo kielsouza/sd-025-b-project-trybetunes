@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { shape } from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import LoadingPage from '../pages/LoadingPage';
 
 class MusicCard extends React.Component {
@@ -9,33 +9,37 @@ class MusicCard extends React.Component {
     this.state = {
       isLoading: false,
       favCheck: false,
-      favSongs: [],
     };
+  }
+
+  async componentDidMount() {
+    const { songObj } = this.props;
+    const favSongs = await getFavoriteSongs();
+    this.setState({
+      favCheck: favSongs.some((obj) => obj.trackId === songObj.trackId) });
   }
 
   favClick = async ({ target }) => {
     const { checked } = target;
     const { songObj } = this.props;
-    const { favSongs } = this.state;
     this.setState({ isLoading: true, favCheck: checked });
-    const apiMusic = await addSong(songObj);
+    await addSong(songObj);
     this.setState({
       isLoading: false,
-      favSongs: [...favSongs, apiMusic],
     });
   };
 
   render() {
     const { isLoading, favCheck } = this.state;
-    const { songObj } = this.props;
-    const { songName, preview, trackId } = songObj;
+    const { songObj, songName } = this.props;
+    const { preview, trackId } = songObj;
     return (
       <div>
         { isLoading ? (
           <LoadingPage />
         ) : (
           <div>
-            <p>{ songName }</p>
+            <p>{songName}</p>
             <audio data-testid="audio-component" src={ preview } controls>
               <track kind="captions" />
               O seu navegador não suporta o elemento
@@ -60,8 +64,8 @@ class MusicCard extends React.Component {
 }
 
 MusicCard.propTypes = {
+  songName: PropTypes.string.isRequired,
   songObj: shape({
-    songName: PropTypes.string,
     preview: PropTypes.string,
     trackId: PropTypes.number,
   }).isRequired,
