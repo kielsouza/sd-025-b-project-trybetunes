@@ -55,7 +55,7 @@ class MusicCard extends React.Component {
               <code>audio</code>
             </audio>
             <label htmlFor="favorite-input">
-              ❤
+              Favorita
               <input
                 id="favorite-input"
                 type="checkbox"
